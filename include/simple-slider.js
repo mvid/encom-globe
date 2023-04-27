@@ -7,12 +7,18 @@
 */
 
 var __slice = [].slice,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  __indexOf =
+    [].indexOf ||
+    function (item) {
+      for (var i = 0, l = this.length; i < l; i++) {
+        if (i in this && this[i] === item) return i;
+      }
+      return -1;
+    };
 
-(function($, window) {
+(function ($, window) {
   var SimpleSlider;
-  SimpleSlider = (function() {
-
+  SimpleSlider = (function () {
     function SimpleSlider(input, options) {
       var ratio,
         _this = this;
@@ -23,56 +29,59 @@ var __slice = [].slice,
         classPrefix: null,
         classSuffix: null,
         theme: null,
-        highlight: false
+        highlight: false,
       };
       this.settings = $.extend({}, this.defaultOptions, options);
       if (this.settings.theme) {
         this.settings.classSuffix = "-" + this.settings.theme;
       }
       this.input.hide();
-      this.slider = $("<div>").addClass("slider" + (this.settings.classSuffix || "")).css({
-        position: "relative",
-        userSelect: "none",
-        boxSizing: "border-box"
-      }).insertBefore(this.input);
+      this.slider = $("<div>")
+        .addClass("slider" + (this.settings.classSuffix || ""))
+        .css({
+          position: "relative",
+          userSelect: "none",
+          boxSizing: "border-box",
+        })
+        .insertBefore(this.input);
       if (this.input.attr("id")) {
         this.slider.attr("id", this.input.attr("id") + "-slider");
       }
       this.track = this.createDivElement("track").css({
-        width: "100%"
+        width: "100%",
       });
       if (this.settings.highlight) {
         this.highlightTrack = this.createDivElement("highlight-track").css({
-          width: "0"
+          width: "0",
         });
       }
       this.dragger = this.createDivElement("dragger");
       this.slider.css({
         minHeight: this.dragger.outerHeight(),
         marginLeft: this.dragger.outerWidth() / 2,
-        marginRight: this.dragger.outerWidth() / 2
+        marginRight: this.dragger.outerWidth() / 2,
       });
       this.track.css({
-        marginTop: this.track.outerHeight() / -2
+        marginTop: this.track.outerHeight() / -2,
       });
       if (this.settings.highlight) {
         this.highlightTrack.css({
-          marginTop: this.track.outerHeight() / -2
+          marginTop: this.track.outerHeight() / -2,
         });
       }
       this.dragger.css({
         marginTop: this.dragger.outerHeight() / -2,
-        marginLeft: this.dragger.outerWidth() / -2
+        marginLeft: this.dragger.outerWidth() / -2,
       });
-      this.track.mousedown(function(e) {
+      this.track.mousedown(function (e) {
         return _this.trackEvent(e);
       });
       if (this.settings.highlight) {
-        this.highlightTrack.mousedown(function(e) {
+        this.highlightTrack.mousedown(function (e) {
           return _this.trackEvent(e);
         });
       }
-      this.dragger.mousedown(function(e) {
+      this.dragger.mousedown(function (e) {
         if (e.which !== 1) {
           return;
         }
@@ -81,22 +90,24 @@ var __slice = [].slice,
         _this.domDrag(e.pageX, e.pageY);
         return false;
       });
-      $("body").mousemove(function(e) {
-        if (_this.dragging) {
-          _this.domDrag(e.pageX, e.pageY);
-          return $("body").css({
-            cursor: "pointer"
-          });
-        }
-      }).mouseup(function(e) {
-        if (_this.dragging) {
-          _this.dragging = false;
-          _this.dragger.removeClass("dragging");
-          return $("body").css({
-            cursor: "auto"
-          });
-        }
-      });
+      $("body")
+        .mousemove(function (e) {
+          if (_this.dragging) {
+            _this.domDrag(e.pageX, e.pageY);
+            return $("body").css({
+              cursor: "pointer",
+            });
+          }
+        })
+        .mouseup(function (e) {
+          if (_this.dragging) {
+            _this.dragging = false;
+            _this.dragger.removeClass("dragging");
+            return $("body").css({
+              cursor: "auto",
+            });
+          }
+        });
       this.pagePos = 0;
       if (this.input.val() === "") {
         this.value = this.getRange().min;
@@ -110,22 +121,25 @@ var __slice = [].slice,
         value: this.value,
         ratio: ratio,
         position: ratio * this.slider.outerWidth(),
-        el: this.slider
+        el: this.slider,
       });
     }
 
-    SimpleSlider.prototype.createDivElement = function(classname) {
+    SimpleSlider.prototype.createDivElement = function (classname) {
       var item;
-      item = $("<div>").addClass(classname).css({
-        position: "absolute",
-        top: "50%",
-        userSelect: "none",
-        cursor: "pointer"
-      }).appendTo(this.slider);
+      item = $("<div>")
+        .addClass(classname)
+        .css({
+          position: "absolute",
+          top: "50%",
+          userSelect: "none",
+          cursor: "pointer",
+        })
+        .appendTo(this.slider);
       return item;
     };
 
-    SimpleSlider.prototype.setRatio = function(ratio) {
+    SimpleSlider.prototype.setRatio = function (ratio) {
       var value;
       ratio = Math.min(1, ratio);
       ratio = Math.max(0, ratio);
@@ -134,7 +148,7 @@ var __slice = [].slice,
       return this.valueChanged(value, ratio, "setRatio");
     };
 
-    SimpleSlider.prototype.setValue = function(value) {
+    SimpleSlider.prototype.setValue = function (value) {
       var ratio;
       value = this.nearestValidValue(value);
       ratio = this.valueToRatio(value);
@@ -142,7 +156,7 @@ var __slice = [].slice,
       return this.valueChanged(value, ratio, "setValue");
     };
 
-    SimpleSlider.prototype.trackEvent = function(e) {
+    SimpleSlider.prototype.trackEvent = function (e) {
       if (e.which !== 1) {
         return;
       }
@@ -151,7 +165,7 @@ var __slice = [].slice,
       return false;
     };
 
-    SimpleSlider.prototype.domDrag = function(pageX, pageY, animate) {
+    SimpleSlider.prototype.domDrag = function (pageX, pageY, animate) {
       var pagePos, ratio, value;
       if (animate == null) {
         animate = false;
@@ -172,32 +186,41 @@ var __slice = [].slice,
       }
     };
 
-    SimpleSlider.prototype.setSliderPosition = function(position, animate) {
+    SimpleSlider.prototype.setSliderPosition = function (position, animate) {
       if (animate == null) {
         animate = false;
       }
       if (animate && this.settings.animate) {
-        this.dragger.animate({
-          left: position
-        }, 200);
+        this.dragger.animate(
+          {
+            left: position,
+          },
+          200
+        );
         if (this.settings.highlight) {
-          return this.highlightTrack.animate({
-            width: position
-          }, 200);
+          return this.highlightTrack.animate(
+            {
+              width: position,
+            },
+            200
+          );
         }
       } else {
         this.dragger.css({
-          left: position
+          left: position,
         });
         if (this.settings.highlight) {
           return this.highlightTrack.css({
-            width: position
+            width: position,
           });
         }
       }
     };
 
-    SimpleSlider.prototype.setSliderPositionFromValue = function(value, animate) {
+    SimpleSlider.prototype.setSliderPositionFromValue = function (
+      value,
+      animate
+    ) {
       var ratio;
       if (animate == null) {
         animate = false;
@@ -206,42 +229,49 @@ var __slice = [].slice,
       return this.setSliderPosition(ratio * this.slider.outerWidth(), animate);
     };
 
-    SimpleSlider.prototype.getRange = function() {
+    SimpleSlider.prototype.getRange = function () {
       if (this.settings.allowedValues) {
         return {
           min: Math.min.apply(Math, this.settings.allowedValues),
-          max: Math.max.apply(Math, this.settings.allowedValues)
+          max: Math.max.apply(Math, this.settings.allowedValues),
         };
       } else if (this.settings.range) {
         return {
           min: parseFloat(this.settings.range[0]),
-          max: parseFloat(this.settings.range[1])
+          max: parseFloat(this.settings.range[1]),
         };
       } else {
         return {
           min: 0,
-          max: 1
+          max: 1,
         };
       }
     };
 
-    SimpleSlider.prototype.nearestValidValue = function(rawValue) {
+    SimpleSlider.prototype.nearestValidValue = function (rawValue) {
       var closest, maxSteps, range, steps;
       range = this.getRange();
       rawValue = Math.min(range.max, rawValue);
       rawValue = Math.max(range.min, rawValue);
       if (this.settings.allowedValues) {
         closest = null;
-        $.each(this.settings.allowedValues, function() {
-          if (closest === null || Math.abs(this - rawValue) < Math.abs(closest - rawValue)) {
-            return closest = this;
+        $.each(this.settings.allowedValues, function () {
+          if (
+            closest === null ||
+            Math.abs(this - rawValue) < Math.abs(closest - rawValue)
+          ) {
+            return (closest = this);
           }
         });
         return closest;
       } else if (this.settings.step) {
         maxSteps = (range.max - range.min) / this.settings.step;
         steps = Math.floor((rawValue - range.min) / this.settings.step);
-        if ((rawValue - range.min) % this.settings.step > this.settings.step / 2 && steps < maxSteps) {
+        if (
+          (rawValue - range.min) % this.settings.step >
+            this.settings.step / 2 &&
+          steps < maxSteps
+        ) {
           steps += 1;
         }
         return steps * this.settings.step + range.min;
@@ -250,13 +280,16 @@ var __slice = [].slice,
       }
     };
 
-    SimpleSlider.prototype.valueToRatio = function(value) {
+    SimpleSlider.prototype.valueToRatio = function (value) {
       var allowedVal, closest, closestIdx, idx, range, _i, _len, _ref;
       if (this.settings.equalSteps) {
         _ref = this.settings.allowedValues;
         for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
           allowedVal = _ref[idx];
-          if (!(typeof closest !== "undefined" && closest !== null) || Math.abs(allowedVal - value) < Math.abs(closest - value)) {
+          if (
+            !(typeof closest !== "undefined" && closest !== null) ||
+            Math.abs(allowedVal - value) < Math.abs(closest - value)
+          ) {
             closest = allowedVal;
             closestIdx = idx;
           }
@@ -272,7 +305,7 @@ var __slice = [].slice,
       }
     };
 
-    SimpleSlider.prototype.ratioToValue = function(ratio) {
+    SimpleSlider.prototype.ratioToValue = function (ratio) {
       var idx, range, rawValue, step, steps;
       if (this.settings.equalSteps) {
         steps = this.settings.allowedValues.length;
@@ -286,7 +319,7 @@ var __slice = [].slice,
       }
     };
 
-    SimpleSlider.prototype.valueChanged = function(value, ratio, trigger) {
+    SimpleSlider.prototype.valueChanged = function (value, ratio, trigger) {
       var eventData;
       if (value.toString() === this.value.toString()) {
         return;
@@ -297,39 +330,48 @@ var __slice = [].slice,
         ratio: ratio,
         position: ratio * this.slider.outerWidth(),
         trigger: trigger,
-        el: this.slider
+        el: this.slider,
       };
-      return this.input.val(value).trigger($.Event("change", eventData)).trigger("slider:changed", eventData);
+      return this.input
+        .val(value)
+        .trigger($.Event("change", eventData))
+        .trigger("slider:changed", eventData);
     };
 
     return SimpleSlider;
-
   })();
   $.extend($.fn, {
-    simpleSlider: function() {
+    simpleSlider: function () {
       var params, publicMethods, settingsOrMethod;
-      settingsOrMethod = arguments[0], params = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      (settingsOrMethod = arguments[0]),
+        (params = 2 <= arguments.length ? __slice.call(arguments, 1) : []);
       publicMethods = ["setRatio", "setValue"];
-      return $(this).each(function() {
+      return $(this).each(function () {
         var obj, settings;
-        if (settingsOrMethod && __indexOf.call(publicMethods, settingsOrMethod) >= 0) {
+        if (
+          settingsOrMethod &&
+          __indexOf.call(publicMethods, settingsOrMethod) >= 0
+        ) {
           obj = $(this).data("slider-object");
           return obj[settingsOrMethod].apply(obj, params);
         } else {
           settings = settingsOrMethod;
-          return $(this).data("slider-object", new SimpleSlider($(this), settings));
+          return $(this).data(
+            "slider-object",
+            new SimpleSlider($(this), settings)
+          );
         }
       });
-    }
+    },
   });
-  return $(function() {
-    return $("[data-slider]").each(function() {
+  return $(function () {
+    return $("[data-slider]").each(function () {
       var $el, allowedValues, settings, x;
       $el = $(this);
       settings = {};
       allowedValues = $el.data("slider-values");
       if (allowedValues) {
-        settings.allowedValues = (function() {
+        settings.allowedValues = (function () {
           var _i, _len, _ref, _results;
           _ref = allowedValues.split(",");
           _results = [];
