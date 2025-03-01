@@ -21,10 +21,10 @@
         <!-- required for the application -->
         <script src="data.js"></script>
         <script src="grid.js"></script>
-
-        <!-- ref:js build/encom-globe.min.js -->
-        <script src="build/encom-globe.js"></script>
-        <!-- endref -->
+        
+        <!-- HtmlWebpackPlugin will automatically include the bundle.
+             When running "npm start" or building with "npm run build:demo",
+             this will be handled automatically. -->
 
         <script>
 
@@ -40,7 +40,7 @@
                     newData = data.slice();
                 }
 
-                globe = new ENCOM.Globe(window.innerWidth, window.innerHeight, {
+                globe = new Globe(window.innerWidth, window.innerHeight, {
                     font: "Inconsolata",
                     data: newData, // copy the data array
                     tiles: grid.tiles,

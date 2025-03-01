@@ -14,6 +14,26 @@ The Encom Globe was written as part of a [larger project](http://www.robscanlon.
 
 View [index.html](index.html) for a usage example.
 
+### Development
+
+This project uses Webpack for building and bundling:
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Build library files (dist/encom-globe.js and dist/encom-globe.min.js)
+npm run build
+
+# Build complete demo
+npm run build:demo
+```
+
+For more detailed build instructions, see [BUILD.md](BUILD.md).
+
 ### License
 
 The MIT License (MIT)
